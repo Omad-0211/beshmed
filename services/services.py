@@ -10,7 +10,37 @@ WORKERS = {
         "Xolisov Farrux", "Karimov Jahongir", "Toshmatov Shoxrux",
         "Qodirov Laziz", "Yuldashev Bobur", "Komilov Islom", "Nazarov Doniyor"
     ],
-    # ... boshqa kategoriyalar ...
+    "darslar": [
+        "Rahmonov Alisher", "Usmonov Sardor", "Adminstratorlar bo'limi", 
+        "Xolisov Farrux", "Karimov Jahongir", "Toshmatov Shoxrux",
+        "Qodirov Laziz", "Yuldashev Bobur", "Komilov Islom", "Nazarov Doniyor"
+    ], 
+    "nazorat": [
+        "Rahmonov Alisher", "Usmonov Sardor", "Adminstratorlar bo'limi", 
+        "Xolisov Farrux", "Karimov Jahongir", "Toshmatov Shoxrux",
+        "Qodirov Laziz", "Yuldashev Bobur", "Komilov Islom", "Nazarov Doniyor"
+    ],
+    "ishlabchiqarish": [
+        "Rahmonov Alisher", "Usmonov Sardor", "Adminstratorlar bo'limi", 
+        "Xolisov Farrux", "Karimov Jahongir", "Toshmatov Shoxrux",
+        "Qodirov Laziz", "Yuldashev Bobur", "Komilov Islom", "Nazarov Doniyor"
+    ],
+    "diploma": [
+        "Rahmonov Alisher", "Usmonov Sardor", "Adminstratorlar bo'limi", 
+        "Xolisov Farrux", "Karimov Jahongir", "Toshmatov Shoxrux",
+        "Qodirov Laziz", "Yuldashev Bobur", "Komilov Islom", "Nazarov Doniyor"
+    ],
+     "attestatsiya": [
+        "Rahmonov Alisher", "Usmonov Sardor", "Adminstratorlar bo'limi", 
+        "Xolisov Farrux", "Karimov Jahongir", "Toshmatov Shoxrux",
+        "Qodirov Laziz", "Yuldashev Bobur", "Komilov Islom", "Nazarov Doniyor"
+    ],
+    "amaliyot": [
+        "Rahmonov Alisher", "Usmonov Sardor", "Adminstratorlar bo'limi", 
+        "Xolisov Farrux", "Karimov Jahongir", "Toshmatov Shoxrux",
+        "Qodirov Laziz", "Yuldashev Bobur", "Komilov Islom", "Nazarov Doniyor"
+    ], 
+
 }
 
 REPORT_FILES = {
