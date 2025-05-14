@@ -1,0 +1,1 @@
+user_states = {}  # Foydalanuvchi holati
