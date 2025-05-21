@@ -1,9 +1,7 @@
-# loader.py fayli
-# env.py fayli
 from aiogram import Bot, Dispatcher
 import os
 
-TOKEN = "8189775604:AAFOOV-3kSFiGJdBgh1L_2gT2oB3AOO3-4U"
+TOKEN = "7899818015:AAHKr0weKzEWKvJ9YUlr_17QksMUKikilig"
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)

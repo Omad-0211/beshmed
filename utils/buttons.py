@@ -1,17 +1,18 @@
-# buttons.py fayli
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 from services.services import WORKERS
 
 main_menu = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 main_menu.add(
     KeyboardButton("Korrupsiya holatlari bo'yicha"),
-    KeyboardButton("Dars mashg'ulotlari bo'yicha"),
-    KeyboardButton("Nazorat ishlari bo'yicha"),
-    KeyboardButton("Ishlab chiqarish amaliyoti bo'yicha"),
-    KeyboardButton("Diplom ishlari amaliyoti bo'yicha"),
-    KeyboardButton("Yakuniy davlat attestatsiyasi bo'yicha"),
-    KeyboardButton("Amaliy mashg'ulotlar tashkili bo'yicha"),
-    KeyboardButton("Ta'lim sifatini yaxshilash bo'yicha")
+    KeyboardButton("Dars mashg'ulotlarini o'tilishi"),
+    KeyboardButton("Nazorat ishlarining olib borilishi"),
+    KeyboardButton("Ishlab chiqarish amaliyoti holati"),
+    KeyboardButton("Diplom oldi amaliyot holati"),
+    KeyboardButton("Yakuniy davlat attestatsiyasi"),
+    KeyboardButton("Amaliy mashg'ulotlar tashkillanish holati"),
+),
+main_menu.add(
+    KeyboardButton("Ta'lim sifatini yaxshilash bo'yicha"),
 )
 
 back_button = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton("🔙 Ortga"))

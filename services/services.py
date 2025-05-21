@@ -1,9 +1,9 @@
-# services.py fayli
 import os
 import json
 from datetime import datetime
 from aiogram import Bot
 
+# Faqat 3 ta kategoriya uchun ismlar ro'yxati
 WORKERS = {
     "korrupsiya": [
         "Rahmonov Alisher", "Usmonov Sardor", "Adminstratorlar bo'limi", 
@@ -19,28 +19,7 @@ WORKERS = {
         "Rahmonov Alisher", "Usmonov Sardor", "Adminstratorlar bo'limi", 
         "Xolisov Farrux", "Karimov Jahongir", "Toshmatov Shoxrux",
         "Qodirov Laziz", "Yuldashev Bobur", "Komilov Islom", "Nazarov Doniyor"
-    ],
-    "ishlabchiqarish": [
-        "Rahmonov Alisher", "Usmonov Sardor", "Adminstratorlar bo'limi", 
-        "Xolisov Farrux", "Karimov Jahongir", "Toshmatov Shoxrux",
-        "Qodirov Laziz", "Yuldashev Bobur", "Komilov Islom", "Nazarov Doniyor"
-    ],
-    "diploma": [
-        "Rahmonov Alisher", "Usmonov Sardor", "Adminstratorlar bo'limi", 
-        "Xolisov Farrux", "Karimov Jahongir", "Toshmatov Shoxrux",
-        "Qodirov Laziz", "Yuldashev Bobur", "Komilov Islom", "Nazarov Doniyor"
-    ],
-     "attestatsiya": [
-        "Rahmonov Alisher", "Usmonov Sardor", "Adminstratorlar bo'limi", 
-        "Xolisov Farrux", "Karimov Jahongir", "Toshmatov Shoxrux",
-        "Qodirov Laziz", "Yuldashev Bobur", "Komilov Islom", "Nazarov Doniyor"
-    ],
-    "amaliyot": [
-        "Rahmonov Alisher", "Usmonov Sardor", "Adminstratorlar bo'limi", 
-        "Xolisov Farrux", "Karimov Jahongir", "Toshmatov Shoxrux",
-        "Qodirov Laziz", "Yuldashev Bobur", "Komilov Islom", "Nazarov Doniyor"
-    ], 
-
+    ]
 }
 
 REPORT_FILES = {

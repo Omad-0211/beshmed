@@ -13,21 +13,48 @@ from utils.texts import category_map
 
 CHANNEL_ID = -1002468881091  # Kanal ID (-100...)
 
-@dp.message_handler(lambda message: message.text in category_map.keys())
-async def process_category(message: types.Message):
+# Ismlar ro'yxati chiqadigan maxsus kategoriyalar
+SPECIAL_CATEGORIES = [
+    "Dars mashg'ulotlarini o'tilishi",
+    "Nazorat ishlarining olib borilishi",
+    "Korrupsiya holatlari bo'yicha"
+]
+
+@dp.message_handler(commands=['start', 'help'])
+async def send_welcome(message: types.Message):
+    await message.reply("Assalomu alaykum! Quyidagi bo'limlardan birini tanlang:", reply_markup=main_menu)
+
+@dp.message_handler(lambda message: message.text in SPECIAL_CATEGORIES)
+async def process_special_category(message: types.Message):
     category = category_map.get(message.text)
     if category:
         await message.answer("Kim haqida izoh bermoqchisiz?", reply_markup=get_people_buttons(category))
     else:
         await message.reply("Noto'g'ri tanlov. Iltimos, menyudan biror bo'limni tanlang.", reply_markup=main_menu)
 
-@dp.message_handler(lambda message: message.text == "Ta'lim sifatini yaxshilash bo'yicha")
-async def handle_talim_sifati(message: types.Message):
-    user_states[message.from_user.id] = {
-        "category": "ta'lim_sifati",
-        "person": "Ta'lim sifatini yaxshilash"
+@dp.message_handler(lambda message: message.text in category_map.keys() and message.text not in SPECIAL_CATEGORIES)
+async def process_direct_category(message: types.Message):
+    category = category_map.get(message.text)
+    if not category:
+        await message.reply("Noto'g'ri tanlov. Iltimos, menyudan biror bo'limni tanlang.", reply_markup=main_menu)
+        return
+
+    # Maxsus yo'nalishlar uchun mos xabarlar
+    prompt_messages = {
+        "Yakuniy davlat attestatsiyasi": "✍️ Imtihon oluvchining FIOsini kiriting:",
+        "Ishlab chiqarish amaliyoti holati": "✍️ Uslubiy rahbar FIOsini yozing:",
+        "Amaliy mashg'ulotlar tashkillanish holati": "✍️ Amaliyot o'qituvchisi FIOsini kiriting:",
+        "Diplom oldi amaliyot holati": "✍️ Diplom oldi amaliyot holati bo'yicha izohingizni yozing:",
+        "Ta'lim sifatini yaxshilash bo'yicha": "✍️ Ta'lim sifatini yaxshilash bo'yicha taklifingizni yozing:"
     }
-    await message.answer("✍️ Ta'lim sifatini yaxshilash bo'yicha taklifingizni yozing:", reply_markup=back_button)
+
+    user_states[message.from_user.id] = {
+        "category": category,
+        "person": message.text
+    }
+    
+    await message.answer(prompt_messages.get(message.text, f"✍️ {message.text} bo'yicha izohingizni yozing:"), 
+                        reply_markup=back_button)
 
 @dp.callback_query_handler(lambda c: ':' in c.data)
 async def process_callback(callback_query: types.CallbackQuery):
@@ -80,6 +107,7 @@ async def process_text(message: types.Message):
         del user_states[user_id]
     else:
         await message.reply("Iltimos, menyudan kerakli bo'limni tanlang.", reply_markup=main_menu)
+
 from aiohttp import ClientSession
 
 async def on_shutdown(dp):
