@@ -64,8 +64,6 @@ async def send_welcome(message: types.Message):
 
 
 
-
-
 @dp.message_handler(lambda message: message.text and any(message.text.lower().strip().startswith(k.lower()) for k in SPECIAL_CATEGORIES))
 async def process_special_category(message: types.Message):
     text = message.text.lower().strip()
@@ -92,6 +90,8 @@ async def process_person_selection(callback_query: types.CallbackQuery, state: F
     await state.update_data(category=category, person=person)
     await bot.send_message(callback_query.from_user.id, f"✍️ {person} haqida izoh yozing:", reply_markup=back_button)
     await ReportStates.waiting_for_comment.set()
+
+
 
 
 @dp.message_handler(lambda message: message.text and any(message.text.lower().strip().startswith(k.lower()) for k in category_map.keys()) and
