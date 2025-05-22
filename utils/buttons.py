@@ -9,9 +9,9 @@ main_menu.add(
     KeyboardButton("Ishlab chiqarish amaliyoti holati"),
     KeyboardButton("Diplom oldi amaliyot holati"),
     KeyboardButton("Yakuniy davlat attestatsiyasi"),
-    KeyboardButton("Amaliy mashg'ulotlar tashkillanish holati"),
 ),
 main_menu.add(
+    KeyboardButton("Amaliy mashg'ulotlar tashkillanish holati"),
     KeyboardButton("Ta'lim sifatini yaxshilash bo'yicha"),
 )
 
