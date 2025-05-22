@@ -6,12 +6,14 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from config import Config
 from state.state import ReportStates
-from services.services import WORKERS
+from services.services import WORKERS, getTeacher, createUser, getUser
+
 
 # Botni ishga tushiramiz
 bot = Bot(token=Config.BOT_TOKEN)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
+
 
 # Kategoriyalar
 category_map = {
@@ -31,6 +33,7 @@ SPECIAL_CATEGORIES = [
     "Nazorat ishlarining olib borilishi"
 ]
 
+
 # Asosiy menyu
 main_menu = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 for category in category_map.keys():
@@ -38,21 +41,50 @@ for category in category_map.keys():
 
 back_button = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton("🔙 Ortga"))
 
+
+
+
+
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
+    
+    user_id = message.from_user.id
+    name = message.from_user.first_name
+    
+    user = getUser(user_id)
+    if not user:
+        users = {
+            "user_id": user_id,
+            "name": name
+        }
+        createUser(users)
+        
     await message.reply("Assalomu alaykum! Quyidagi bo'limlardan birini tanlang:", reply_markup=main_menu)
 
-@dp.message_handler(lambda message: message.text in SPECIAL_CATEGORIES)
+
+
+
+
+
+@dp.message_handler(lambda message: message.text and any(message.text.lower().strip().startswith(k.lower()) for k in SPECIAL_CATEGORIES))
 async def process_special_category(message: types.Message):
-    category = category_map.get(message.text)
-    if category:
-        workers = WORKERS.get(category, [])
+    text = message.text.lower().strip()
+    matched_category = None
+    for cat in SPECIAL_CATEGORIES:
+        if text.startswith(cat.lower()):
+            matched_category = cat
+            break
+
+    if matched_category:
+        category = category_map.get(matched_category)
+        teachers = getTeacher()
         keyboard = InlineKeyboardMarkup(row_width=2)
-        for worker in workers:
-            keyboard.add(InlineKeyboardButton(text=worker, callback_data=f"{category}:{worker}"))
+        for teacher in teachers:
+            keyboard.add(InlineKeyboardButton(text=teacher['name'], callback_data=f"{category}:{teacher['name']}"))
         await message.answer("Kim haqida izoh bermoqchisiz?", reply_markup=keyboard)
     else:
         await message.reply("Noto'g'ri tanlov.", reply_markup=main_menu)
+
 
 @dp.callback_query_handler(lambda c: ':' in c.data)
 async def process_person_selection(callback_query: types.CallbackQuery, state: FSMContext):
@@ -61,14 +93,23 @@ async def process_person_selection(callback_query: types.CallbackQuery, state: F
     await bot.send_message(callback_query.from_user.id, f"✍️ {person} haqida izoh yozing:", reply_markup=back_button)
     await ReportStates.waiting_for_comment.set()
 
-@dp.message_handler(lambda message: message.text in category_map.keys() and message.text not in SPECIAL_CATEGORIES)
+
+@dp.message_handler(lambda message: message.text and any(message.text.lower().strip().startswith(k.lower()) for k in category_map.keys()) and
+                                   not any(message.text.lower().strip().startswith(k.lower()) for k in SPECIAL_CATEGORIES))
 async def process_regular_category(message: types.Message, state: FSMContext):
-    category = category_map.get(message.text)
-    if not category:
+    text = message.text.lower().strip()
+    matched_category = None
+    for cat in category_map.keys():
+        if text.startswith(cat.lower()) and cat not in SPECIAL_CATEGORIES:
+            matched_category = cat
+            break
+
+    if not matched_category:
         await message.reply("Noto'g'ri tanlov.", reply_markup=main_menu)
         return
     
-    await state.update_data(category=category, person=message.text)
+    category = category_map.get(matched_category)
+    await state.update_data(category=category, person=matched_category)
     
     prompt_messages = {
         "Ishlab chiqarish amaliyoti holati": "✍️ Uslubiy rahbar FIOsini yozing:",
@@ -79,10 +120,11 @@ async def process_regular_category(message: types.Message, state: FSMContext):
     }
     
     await message.answer(
-        prompt_messages.get(message.text, f"✍️ {message.text} bo'yicha izohingizni yozing:"),
+        prompt_messages.get(matched_category, f"✍️ {matched_category} bo'yicha izohingizni yozing:"),
         reply_markup=back_button
     )
     await ReportStates.waiting_for_comment.set()
+
 
 @dp.message_handler(state=ReportStates.waiting_for_comment)
 async def process_comment(message: types.Message, state: FSMContext):
@@ -110,6 +152,7 @@ async def process_comment(message: types.Message, state: FSMContext):
         await message.reply("❌ Kanalga yuborishda xatolik yuz berdi.", reply_markup=main_menu)
     
     await state.finish()
+
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)

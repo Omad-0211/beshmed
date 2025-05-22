@@ -1,25 +1,39 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
-from services.services import WORKERS
+from services.services import WORKERS, getCategory, getTeacher
 
-main_menu = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-main_menu.add(
-    KeyboardButton("Korrupsiya holatlari bo'yicha"),
-    KeyboardButton("Dars mashg'ulotlarini o'tilishi"),
-    KeyboardButton("Nazorat ishlarining olib borilishi"),
-    KeyboardButton("Ishlab chiqarish amaliyoti holati"),
-    KeyboardButton("Diplom oldi amaliyot holati"),
-    KeyboardButton("Yakuniy davlat attestatsiyasi"),
-),
-main_menu.add(
-    KeyboardButton("Amaliy mashg'ulotlar tashkillanish holati"),
-    KeyboardButton("Ta'lim sifatini yaxshilash bo'yicha"),
-)
 
+
+
+def main_menu():
+    categories = getCategory()
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+
+    buttons = []
+    for idx, category in enumerate(categories, start=1):
+        name = category.get("name")
+        if name:
+            button_text = f"{name}"
+            buttons.append(KeyboardButton(button_text))
+
+    keyboard.add(*buttons) 
+
+    return keyboard
+
+    
+    
 back_button = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton("🔙 Ortga"))
 
 def get_people_buttons(category):
-    workers = WORKERS.get(category, [])
+    teachers = getTeacher()  
+    
     keyboard = InlineKeyboardMarkup(row_width=2)
-    buttons = [InlineKeyboardButton(text=name, callback_data=f"{category}:{name}") for name in workers]
+    
+    buttons = [
+        InlineKeyboardButton(
+            text=teacher['name'], 
+            callback_data=f"{category}:{teacher['name']}"
+        ) for teacher in teachers
+    ]
+    
     keyboard.add(*buttons)
     return keyboard
